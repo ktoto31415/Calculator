@@ -8,29 +8,45 @@ second_operations = ["*","/"]
 thirsth_operations= ["+","-"]
 # print("3+5*(7-6)".split(thirsth_operations))
 def split_double_list_once(object:list):                    #[list_return, is_not_nested_list_in_return_list]распаковка вложенных листов с глубиной 1
+    if not isinstance(object, list):
+        raise TypeError("Argument must be list")
+    print("once spliter is start working", object)
     ret=[]
     result=[]
     result_eficience=True
     for i in object:
+        print("     once deep check element in list start ", i)
         if isinstance(i, list)==True:
+            print("     isinstance(i, list)==True ", i)
             for a in i:
                 result.append(a)
         else:
+            print("     isinstance(i, list)==False ", i)
             result.append(i)
-    insert_str=result
-    for i in insert_str:
+    for i in result:
         if isinstance(i,list):
             result_eficience=False
     ret=[result, result_eficience]
+    print("     ",ret)
     return ret
-def split_for_masive(insert_str: list,spliter: list):      
-    in_objlist_is_nested_list="dontknow"
-    # for a in insert_str:
-    while in_objlist_is_nested_list==True or in_objlist_is_nested_list=='dontknow':
-        bufer=split_double_list_once(insert_str)
-        insert_str=bufer[0]
-        if bufer[1] == False:
+
+def spliter_nested_lists(object:list):
+    print("spliter_nested_lists start working")
+    in_objlist_is_nested_list=True
+    while in_objlist_is_nested_list==True:
+        print("step_spliter")
+        bufer=split_double_list_once(object)
+        if bufer[1] == True:
             in_objlist_is_nested_list=False
+            print("end")
+    print(bufer)
+    return bufer
+
+def split_for_masive(insert_str: list,spliter: list):
+    if not isinstance(insert_str, list) or not isinstance(spliter, list):
+        raise TypeError("Arguments must be lists")      
+    
+    insert_str=spliter_nested_lists(insert_str)[0]
                 
     for a in insert_str:
         proxod=[]
@@ -39,8 +55,9 @@ def split_for_masive(insert_str: list,spliter: list):
             for z in proxod:
                 if i in proxod:
                     split_for_masive(proxod, spliter)
+    proxod=spliter_nested_lists(proxod)[0]
     return proxod
 
-split_for_masive("3+5*(7-6)",thirsth_operations)
 if __name__ == "__main__":
-    split_for_masive("3+5*(7-6)",thirsth_operations)
+    print(split_for_masive(["3+5*(7-6)"],thirsth_operations))
+
